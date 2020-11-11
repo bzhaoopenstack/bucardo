@@ -1,4 +1,7 @@
 language: perl
+arch:
+  - arm64
+  - amd64
 
 perl:
   - 5.24
