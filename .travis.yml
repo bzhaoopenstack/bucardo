@@ -5,7 +5,7 @@ arch:
 dist: bionic
 
 perl:
-  - 5.30.0
+  - 5.30
 
 sudo: true
 
@@ -26,6 +26,17 @@ before_install:
     wget --quiet -O - https://apt.postgresql.org/pub/repos/apt/ACCC4CF8.asc | sudo apt-key add - ;
     fi
   - sudo apt-get update -qq
+  - if [[ $TRAVIS_CPU_ARCH =~ arm64* ]]; then
+    sudo apt-get install cpanminus -y ;
+    if [[ $TRAVIS_PERL_VERSION =~ ^([0-9]+\.){1}([0-9]+)$ ]]; then
+    INSTALL_PERL_VERSION=$TRAVIS_PERL_VERSION.0 ;
+    perlbrew install -n $INSTALL_PERL_VERSION ;
+    perlbrew use $INSTALL_PERL_VERSION ;
+    fi
+    echo "yes" | sudo cpan install DBIx::Safe ;
+    echo "yes" | sudo cpan install CGI ;
+    perl --version ;
+    fi
   - sudo apt-get install -y
     postgresql-${PGVERSION}
     postgresql-client-${PGVERSION}
@@ -35,12 +46,6 @@ before_install:
     postgresql-plperl-${PGVERSION}
     debhelper fakeroot libdbd-pg-perl
     libtap-parser-sourcehandler-pgtap-perl
-  - sudo apt-get install cpanminus -y
-  - if [[ $TRAVIS_CPU_ARCH =~ arm64* ]]; then
-    echo "yes" | sudo cpan install DBIx::Safe ;
-    echo "yes" | sudo cpan install CGI ;
-    fi
-  - perl --version
   # Set PATH as postgresql-server-dev-all pretends version is 11
   - export PATH=/usr/lib/postgresql/${PGVERSION}/bin:${PATH}
 
