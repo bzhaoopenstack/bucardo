@@ -1,10 +1,11 @@
 language: perl
 arch:
   - arm64
+  - amd64
 dist: bionic
 
 perl:
-  - 5.30
+  - 5.30.0
 
 sudo: true
 
@@ -36,8 +37,8 @@ before_install:
     libtap-parser-sourcehandler-pgtap-perl
   - sudo apt-get install cpanminus -y
   - if [[ $TRAVIS_CPU_ARCH =~ arm64* ]]; then
-    sudo cpan install DBIx::Safe ;
-    sudo cpan install CGI ;
+    echo "yes" | sudo cpan install DBIx::Safe ;
+    echo "yes" | sudo cpan install CGI ;
     fi
   - perl --version
   # Set PATH as postgresql-server-dev-all pretends version is 11
