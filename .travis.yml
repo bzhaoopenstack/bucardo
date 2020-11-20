@@ -31,9 +31,9 @@ before_install:
             INSTALL_PERL_VERSION=$TRAVIS_PERL_VERSION.0 ;
             which travis_wait ;
             travis_wait 20 perlbrew install -n $INSTALL_PERL_VERSION ;
-            perlbrew switch $INSTALL_PERL_VERSION ;
-            travis_wait 20 curl -L https://cpanmin.us | perl - App::cpanminus ;
+            perlbrew use $INSTALL_PERL_VERSION ;
             perl --version ;
+            sudo apt-get install cpanminus -y ;
         fi ;
         travis_wait 5 echo "yes" | sudo cpan install DBIx::Safe ;
         travis_wait 5 echo "yes" | sudo cpan install CGI ;
