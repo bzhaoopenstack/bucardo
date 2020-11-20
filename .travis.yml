@@ -34,7 +34,6 @@ before_install:
             perlbrew use $INSTALL_PERL_VERSION ;
             perl --version ;
             sudo apt-get install cpanminus -y ;
-            cpan -V ;
             cpanm -V ;
         fi ;
         echo "yes" | sudo cpan install DBIx::Safe ;
