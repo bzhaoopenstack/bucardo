@@ -37,10 +37,10 @@ before_install:
             sudo apt-get install cpanminus -y ;
             cpanm -V ;
         fi ;
-        echo "yes" | sudo cpan install DBIx::Safe ;
-        echo "yes" | sudo cpan install CGI ;
-        echo "yes" | sudo cpan install DBD::Pg ;
-        echo "yes" | sudo cpan install DBI ;
+        travis_wait 10 echo "yes" | sudo cpan install DBIx::Safe ;
+        travis_wait 10 echo "yes" | sudo cpan install CGI ;
+        travis_wait 10 echo "yes" | sudo cpan install DBD::Pg ;
+        travis_wait 10 echo "yes" | sudo cpan install DBI ;
     fi
   - sudo apt-get install -y
     postgresql-${PGVERSION}
