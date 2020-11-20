@@ -27,16 +27,18 @@ before_install:
     fi
   - sudo apt-get update -qq
   - if [[ $TRAVIS_CPU_ARCH =~ arm64* ]]; then
-        sudo apt-get install cpanminus -y ;
         if [[ $TRAVIS_PERL_VERSION =~ ^([0-9]+\.){1}([0-9]+)$ ]]; then
             INSTALL_PERL_VERSION=$TRAVIS_PERL_VERSION.0 ;
             which travis_wait ;
             travis_wait 20 perlbrew install -n $INSTALL_PERL_VERSION ;
-            perlbrew use $INSTALL_PERL_VERSION ;
+            perlbrew switch $INSTALL_PERL_VERSION ;
+            travis_wait 20 curl -L https://cpanmin.us | perl - App::cpanminus ;
+            perl --version ;
         fi ;
-        echo "yes" | sudo cpan install DBIx::Safe ;
-        echo "yes" | sudo cpan install CGI ;
-        perl --version ;
+        travis_wait 5 echo "yes" | sudo cpan install DBIx::Safe ;
+        travis_wait 5 echo "yes" | sudo cpan install CGI ;
+        travis_wait 5 echo "yes" | sudo cpan install DBD::Pg ;
+        travis_wait 5 echo "yes" | sudo cpan install DBI ;
     fi
   - sudo apt-get install -y
     postgresql-${PGVERSION}
