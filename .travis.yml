@@ -6,6 +6,7 @@ dist: bionic
 
 perl:
   - 5.30
+  - 5.24
 
 sudo: true
 
@@ -34,13 +35,13 @@ before_install:
             travis_wait 20 perlbrew install -n $INSTALL_PERL_VERSION ;
             perlbrew use $INSTALL_PERL_VERSION ;
             perl --version ;
-            sudo apt-get install cpanminus -y ;
+            sudo rm -rf `which cpan` ;
+            sudo ln -s $(dirname `which perl`)/cpan /usr/bin/cpan ;
+            sudo wget http://xrl.us/cpanm -O /usr/bin/cpanm ;
+            sudo chmod +x /usr/bin/cpanm ;
             cpanm -V ;
         fi ;
-        travis_wait 10 echo "yes" | sudo cpan install DBIx::Safe ;
-        travis_wait 10 echo "yes" | sudo cpan install CGI ;
-        travis_wait 10 echo "yes" | sudo cpan install DBD::Pg ;
-        travis_wait 10 echo "yes" | sudo cpan install DBI ;
+        cpanm DBIx::Safe CGI DBD::Pg DBI ;
     fi
   - sudo apt-get install -y
     postgresql-${PGVERSION}
@@ -55,6 +56,12 @@ before_install:
   - export PATH=/usr/lib/postgresql/${PGVERSION}/bin:${PATH}
 
 script:
+  - which perl
+  - ls -l `which perl`
+  - which cpan
+  - ls -l `which cpan`
+  - which cpanm
+  - ls -l `which cpanm`
   - perl Makefile.PL
   - BUCARDO_LOG_ERROR_CONTEXT=1 PATH=$PATH:/usr/lib/postgresql/${PGVERSION}/bin make test
 
