@@ -30,9 +30,8 @@ before_install:
         sudo apt-get install cpanminus -y ;
         if [[ $TRAVIS_PERL_VERSION =~ ^([0-9]+\.){1}([0-9]+)$ ]]; then
             INSTALL_PERL_VERSION=$TRAVIS_PERL_VERSION.0 ;
-            which travis_wait;
-            travis_wait 20 perlbrew install ;
-            perlbrew install -n $INSTALL_PERL_VERSION ;
+            which travis_wait ;
+            travis_wait 20 perlbrew install -n $INSTALL_PERL_VERSION ;
             perlbrew use $INSTALL_PERL_VERSION ;
         fi ;
         echo "yes" | sudo cpan install DBIx::Safe ;
