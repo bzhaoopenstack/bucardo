@@ -21,27 +21,23 @@ before_install:
     postgresql-client-common postgresql-common
   - sudo rm -rf /var/lib/postgresql
   - if [[ $TRAVIS_CPU_ARCH =~ arm64* ]]; then
-    source /etc/lsb-release ;
-    echo "deb http://apt.postgresql.org/pub/repos/apt/ $DISTRIB_CODENAME-pgdg main ${PGVERSION}" > pgdg.list ;
-    sudo mv pgdg.list /etc/apt/sources.list.d/;
-    wget --quiet -O - https://apt.postgresql.org/pub/repos/apt/ACCC4CF8.asc | sudo apt-key add - ;
+        source /etc/lsb-release ;
+        echo "deb http://apt.postgresql.org/pub/repos/apt/ $DISTRIB_CODENAME-pgdg main ${PGVERSION}" > pgdg.list ;
+        sudo mv pgdg.list /etc/apt/sources.list.d/;
+        wget --quiet -O - https://apt.postgresql.org/pub/repos/apt/ACCC4CF8.asc | sudo apt-key add - ;
     fi
   - sudo apt-get update -qq
-  - if [[ $TRAVIS_CPU_ARCH =~ arm64* ]]; then
-        if [[ $TRAVIS_PERL_VERSION =~ ^([0-9]+\.){1}([0-9]+)$ ]]; then
-            INSTALL_PERL_VERSION=$TRAVIS_PERL_VERSION.0 ;
-            curl -L https://install.perlbrew.pl | bash ;
-            source ~/perl5/perlbrew/etc/bashrc ;
-            travis_wait 20 perlbrew install -n $INSTALL_PERL_VERSION ;
-            perlbrew use $INSTALL_PERL_VERSION ;
-            perl --version ;
-            sudo rm -rf `which cpan` ;
-            sudo ln -s $(dirname `which perl`)/cpan /usr/bin/cpan ;
-            sudo wget http://xrl.us/cpanm -O /usr/bin/cpanm ;
-            sudo chmod +x /usr/bin/cpanm ;
-            cpanm -V ;
-        fi ;
-        cpanm DBIx::Safe CGI DBD::Pg DBI ;
+  - if [ $TRAVIS_CPU_ARCH =~ arm64* ] && [ $TRAVIS_PERL_VERSION =~ ^([0-9]+\.){1}([0-9]+)$ ]; then
+        INSTALL_PERL_VERSION=$TRAVIS_PERL_VERSION.0 ;
+        echo "yes" | sudo cpan App::perlbrew ;
+        perlbrew init ;
+        source ~/perl5/perlbrew/etc/bashrc ;
+        cat ~/perl5/perlbrew/etc/bashrc >> ~/.bashrc ;
+        travis_wait 20 perlbrew install -j 4 $INSTALL_PERL_VERSION -n ;
+        perlbrew switch $INSTALL_PERL_VERSION ;
+        perl --version ;
+        echo "y" | perlbrew install-cpanm ;
+        cpanm -V ;
     fi
   - sudo apt-get install -y
     postgresql-${PGVERSION}
@@ -52,16 +48,13 @@ before_install:
     postgresql-plperl-${PGVERSION}
     debhelper fakeroot libdbd-pg-perl
     libtap-parser-sourcehandler-pgtap-perl
+  - if [[ $TRAVIS_CPU_ARCH =~ arm64* ]]; then
+        cpanm DBIx::Safe CGI DBD::Pg DBI -n ;
+    fi
   # Set PATH as postgresql-server-dev-all pretends version is 11
   - export PATH=/usr/lib/postgresql/${PGVERSION}/bin:${PATH}
 
 script:
-  - which perl
-  - ls -l `which perl`
-  - which cpan
-  - ls -l `which cpan`
-  - which cpanm
-  - ls -l `which cpanm`
   - perl Makefile.PL
   - BUCARDO_LOG_ERROR_CONTEXT=1 PATH=$PATH:/usr/lib/postgresql/${PGVERSION}/bin make test
 
