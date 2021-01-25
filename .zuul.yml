@@ -1,0 +1,25 @@
+- project:
+    bucardo-unitest:
+      jobs:
+        - bucardo-unitest-on-X86-for-PR:
+            irrelevant-files:
+              - ^.*\.md$
+              - ^.gitignore$
+              - ^.*\.sh$
+              - ^INSTALL$
+              - ^LICENSE$
+              - ^README.*$
+              - ^SIGNATURE$
+              - ^TODO$
+              - ^UPGRADE$
+        - bucardo-unitest-on-arm64-for-PR:
+            irrelevant-files:
+              - ^.*\.md$
+              - ^.gitignore$
+              - ^.*\.sh$
+              - ^INSTALL$
+              - ^LICENSE$
+              - ^README.*$
+              - ^SIGNATURE$
+              - ^TODO$
+              - ^UPGRADE$
