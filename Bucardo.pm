@@ -1,7 +1,7 @@
 #!perl
 # -*-mode:cperl; indent-tabs-mode: nil; cperl-indent-level: 4-*-
 
-## The main Bucardo program
+## Test The main Bucardo program
 ##
 ## This script should only be called via the 'bucardo' program
 ##
