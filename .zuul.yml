@@ -1,7 +1,7 @@
 - project:
     bucardo-unitest:
       jobs:
-        - bucardo-unitest-on-X86-for-PR:
+        - bucardo-unitest-on-X86-perl5.30-PG10:
             irrelevant-files:
               - ^.*\.md$
               - ^.gitignore$
@@ -12,7 +12,29 @@
               - ^SIGNATURE$
               - ^TODO$
               - ^UPGRADE$
-        - bucardo-unitest-on-arm64-for-PR:
+        - bucardo-unitest-on-X86-perl5.30-PG11:
+            irrelevant-files:
+              - ^.*\.md$
+              - ^.gitignore$
+              - ^.*\.sh$
+              - ^INSTALL$
+              - ^LICENSE$
+              - ^README.*$
+              - ^SIGNATURE$
+              - ^TODO$
+              - ^UPGRADE$
+        - bucardo-unitest-on-X86-perl5.30-PG12:
+            irrelevant-files:
+              - ^.*\.md$
+              - ^.gitignore$
+              - ^.*\.sh$
+              - ^INSTALL$
+              - ^LICENSE$
+              - ^README.*$
+              - ^SIGNATURE$
+              - ^TODO$
+              - ^UPGRADE$
+        - bucardo-unitest-on-arm64-perl5.30-PG12:
             irrelevant-files:
               - ^.*\.md$
               - ^.gitignore$
